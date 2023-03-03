@@ -40,7 +40,7 @@ bottom:
 top_right:
 	fmul.s f12, f2, f2  # b^2 stored to f11
 	fmul.s f13, f6, f1  # 4a stored to f12
-	fmul.s f13, f13, f3 # 4a (in f12) * c stored back to f12
+	fmul.s f13, f13, f3  # 4a (in f12) * c stored back to f12
 	fsub.s f14, f12, f13  # b^2 - 4ac stored to f13
 	fsqrt.s f15, f14  # sqrt(b^2 - 4ac) stored to f14
 	
