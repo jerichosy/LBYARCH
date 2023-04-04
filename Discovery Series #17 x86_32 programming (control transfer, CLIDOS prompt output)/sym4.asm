@@ -21,6 +21,7 @@ main:
     je reprompt_input
     
     ; Else, continue
+    lea esi, [string]  ; Load address of DNA string into esi
     jmp uppercaser
     
 reprompt_input:
@@ -29,6 +30,37 @@ reprompt_input:
     jmp main
     
 uppercaser:
+    ; Load current char
+    mov al, [esi]
+    
+    ; Check if end of string
+    ; If so, jump to store_result
+    cmp al, 0
+    je result
+    
+    ; Else, continue
+    
+    ; If outside range of lowercase letters in ASCII, ignore and move on
+    cmp al, 97
+    jl next_letter
+    cmp al, 122
+    jg next_letter
+    
+    ; Else, must be within lowercase range
+    ; Convert lowercase char to uppercase by subtracting 32
+    sub al, 32
+    
+    ; Store back to string
+    mov [esi], al
+    
+next_letter:
+    ; Increment string address
+    inc esi  
+
+    ; Loop
+    jmp uppercaser
+
+result:
     NEWLINE
     PRINT_STRING string
     
