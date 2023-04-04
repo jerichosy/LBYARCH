@@ -11,17 +11,17 @@ section .data
 section .text
 global main
 main:
-    ; Input name
+    ; Input string
     PRINT_STRING message_input
     GET_STRING string, 31
     
-    ; If name is null, reprompt input again
+    ; If string is null, reprompt input again
     mov al, [string]
     cmp al, 10  ; 10 is LF (Line Feed) which is the char inputted on enter without inputted values
     je reprompt_input
     
     ; Else, continue
-    lea esi, [string]  ; Load address of DNA string into esi
+    lea esi, [string]  ; Load address of string into esi
     jmp uppercaser
     
 reprompt_input:
@@ -34,7 +34,7 @@ uppercaser:
     mov al, [esi]
     
     ; Check if end of string
-    ; If so, jump to store_result
+    ; If so, jump to result
     cmp al, 0
     je result
     
