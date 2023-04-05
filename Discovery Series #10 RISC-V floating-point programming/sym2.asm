@@ -6,9 +6,9 @@
 .end_macro
 
 .macro NEWLINE
-  li a7, 11
-  li a0, 10
-  ecall
+  	li a7, 11
+  	li a0, 10
+	ecall
 .end_macro
 
 .data
@@ -79,4 +79,3 @@ answer:
 	ecall
 	
 	DONE
-	
