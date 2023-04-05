@@ -1,9 +1,12 @@
-# Macro to exit program. 
+# Matthew Jericho Go Sy - S11
+
+# Macro to exit program
 .macro DONE
   	li a7, 10
   	ecall
 .end_macro 
 
+# Macro to print newline
 .macro NEWLINE
   	li a7, 11
   	li a0, 10
