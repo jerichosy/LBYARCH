@@ -38,22 +38,13 @@ start:
 	  
 	# Find length of string
 	li t2, 0  # init length counter
-loop:
-	lb t3, (t1)  # load byte at beginning of string
-	# if end of string, exit loop
-	beq t3, zero, continue  
-	# else, continue
-	# increment
-	addi t2, t2, 1  # increment the counter
-	addi t1, t1, 1  # increment the address
-	j loop
   
 continue:
 	# Replace all occurences of T in DNA string to U to form an RNA string
 	la t1, dna_string
 	la t4, rna_string
   
-loop2:
+loop:
   	lb t3, (t1) # load byte at beginning of string
 	# if end of string, exit loop
 	beq t3, zero, end  
@@ -71,9 +62,10 @@ replace_T_with_U:
 	sb t3, (t4)
   
 increment:
+	addi t2, t2, 1  # increment the length counter
 	addi t1, t1, 1  # increment the address of DNA string
 	addi t4, t4, 1  # increment the address of RNA string
-	j loop2
+	j loop
   
 end:  
 	# -- OUTPUT --
