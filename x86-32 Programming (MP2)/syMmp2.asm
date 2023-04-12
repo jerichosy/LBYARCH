@@ -11,7 +11,7 @@ section .data
     message_harshad db "Harshad Number: ",0
     message_yes db "Yes ",0
     message_no db "No ",0
-    message_reprompt db "Do you want to continue (Y/N) ",0
+    message_reprompt db "Do you want to continue (Y/N)? ",0
     comma db ", ",0
     input dd 0x00000000
     reprompt db "",0
