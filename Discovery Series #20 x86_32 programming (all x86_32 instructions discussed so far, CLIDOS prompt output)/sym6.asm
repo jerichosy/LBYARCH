@@ -23,7 +23,16 @@ main:
     
     ; If both inputs not divisible by 4
     
+    ; check first
     mov eax, [first]
+    cdq
+    mov ecx, 4
+    idiv ecx
+    cmp edx, 0
+    jne error
+    
+    ; check second
+    mov eax, [second]
     cdq
     mov ecx, 4
     idiv ecx
