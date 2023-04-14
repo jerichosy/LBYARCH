@@ -12,22 +12,41 @@ section .data
     message_yes db "Yes ",0
     message_no db "No ",0
     message_reprompt db "Do you want to continue (Y/N)? ",0
+    message_invalid_input db "Error: Invalid input ",0
     comma db ", ",0
     input dd 0x00000000
     reprompt db "",0
     
     length db 0x00
+    
+    dump db 0x00
 
 section .text
 global main
 main:
     PRINT_STRING message_input
+    ; Because if on suceeding runs of main, input is invalid, 
+    ; GET_UDEC will not consume any input and therefore, will not replace the current input contents 
+    ; leading to input validation failing as input still contains the previous valid inputted value.
+    ; To prevent that, reset the input
+    mov dword [input], 0x00000000
     GET_UDEC 4, input
+    GET_CHAR dump ; This is to catch the \n entered when the first input is made
     
     mov eax, [input]
     
+    cmp eax, 0
+    je invalid_input
+    
     xor ebx, ebx  ; This will be the sum
     mov byte [length], 0x00  ; Reset length
+    jmp iterate
+
+invalid_input:
+    PRINT_STRING message_invalid_input
+    NEWLINE
+    GET_STRING dump, 100  ; this is to "consume" the invalid characters
+    jmp main
     
 iterate:
     cmp eax, 0
@@ -95,7 +114,6 @@ ask_reprompt:
     NEWLINE
     NEWLINE
     PRINT_STRING message_reprompt
-    GET_CHAR reprompt  ; This is to catch the \n entered when the first input is made
     GET_CHAR reprompt
     mov al, [reprompt]
     cmp al, 89  ; 'Y'
