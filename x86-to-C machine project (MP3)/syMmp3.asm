@@ -16,7 +16,7 @@ section .data
     message_yes db "Yes ",0
     message_no db "No ",0
     
-    string_dna times 32 db 0  ; 30 DNA + terminator + null byte
+    string_dna times 100 db 0  ; 30 DNA + terminator + null byte
     string_dna_reverse_complement times 32 db 0
     
     length db 0x00
