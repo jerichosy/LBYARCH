@@ -8,6 +8,8 @@ section .data
     error_dna db "Error: Invalid DNA string",13,10,0
     error_terminator db "Error: No terminator",13,10,0
     error_length db "Error: Beyond maximum length",13,10,0
+    error_msg db "Please try again. ",13,10,0
+    newline db "",13,10,0
     message_dna_reverse_complement db "Reverse complement: %s",13,10,0
     message_dna_reverse_palindrome db "Reverse palindrome: %s",13,10,0
     message_yes db "Yes ",0
@@ -32,6 +34,9 @@ main:
     ;call printf
     ;add esp, 4
     
+    ; reset for subsequent calls of main
+    mov byte [length], 0
+    
     ; loop thru string to check if terminator
     lea esi, [string_dna]
     
@@ -55,14 +60,14 @@ beyond_max_length:
     call printf
     add esp, 4
 
-    jmp exit
+    jmp please_try_again
     
 no_terminator:    
     push error_terminator
     call printf
     add esp, 4
     
-    jmp exit
+    jmp please_try_again
     
 terminator_present:    
     ; reverse the string
@@ -193,6 +198,18 @@ reverse_palindrome_no:
     push message_dna_reverse_palindrome
     call printf
     add esp, 8
+    
+    jmp exit
+    
+please_try_again:
+    push error_msg
+    call printf
+    add esp, 4
+    push newline
+    call printf
+    add esp, 4
+    
+    jmp main
     
 exit:
     xor eax, eax
