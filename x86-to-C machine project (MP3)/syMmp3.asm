@@ -35,7 +35,7 @@ main:
     ; loop thru string to check if terminator
     lea esi, [string_dna]
     
-check_terminator:
+check_terminator_and_length:
     mov al, [esi]
     
     cmp al, 46
@@ -48,7 +48,7 @@ check_terminator:
     inc byte [length]
     inc esi
     
-    jmp check_terminator
+    jmp check_terminator_and_length
     
 beyond_max_length:
     push error_length
