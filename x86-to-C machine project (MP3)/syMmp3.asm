@@ -6,6 +6,7 @@ extern gets, printf
 section .data
     prompt_dna db "DNA string: ",0
     error_dna db "Error: Invalid DNA string",0
+    error_terminator db "Error: No terminator",0
     message_dna_reverse_complement db "Reverse complement: %s",13,10,0
     message_dna_reverse_palindrome db "Reverse palindrome: %s",13,10,0
     message_yes db "Yes ",0
@@ -30,15 +31,39 @@ main:
     ;call printf
     ;add esp, 4
     
+    ; loop thru string to check if terminator
+    lea esi, [string_dna]
+    
+check_terminator:
+    mov al, [esi]
+    
+    cmp al, 46
+    je terminator_present
+    cmp al, 0
+    je no_terminator
+    
+    inc esi
+    
+    jmp check_terminator
+    
+no_terminator:    
+    push error_terminator
+    call printf
+    add esp, 4
+    
+    jmp exit
+    
+terminator_present:    
     ; reverse the string
     lea esi, [string_dna]
+    
 reverse_string:
     ; Load current char
     mov al, [esi]
     
-    ; Check if end of string
+    ; Check if terminator
     ; If so, jump
-    cmp al, 0
+    cmp al, 46  ; 46 '.'
     je continue
     
     ; push
@@ -134,7 +159,7 @@ check_reverse_palindrome:
     
     ; both string will be of equal length always
     ; so just check if one of them is already the null
-    cmp ah, 0
+    cmp ah, 46
     je reverse_palindrome_yes
     
     ;if not equal, break and print no
@@ -158,8 +183,6 @@ reverse_palindrome_no:
     push message_dna_reverse_palindrome
     call printf
     add esp, 8
-    
-
     
 exit:
     xor eax, eax
