@@ -8,6 +8,7 @@ section .data
     error_dna db "Error: Invalid DNA string",13,10,0
     error_terminator db "Error: No terminator",13,10,0
     error_length db "Error: Beyond maximum length",13,10,0
+    error_null db "Error: Null input",13,10,0
     error_msg db "Please try again. ",13,10,0
     newline db "",13,10,0
     message_dna_reverse_complement db "Reverse complement: %s",13,10,0
@@ -39,6 +40,20 @@ main:
     
     ; loop thru string to check if terminator
     lea esi, [string_dna]
+    
+    ; but first check for null input
+    mov al, [esi]
+    cmp al, 0
+    je null_input
+    
+    jmp check_terminator_and_length
+    
+null_input:
+    push error_null
+    call printf
+    add esp, 4
+    
+    jmp please_try_again
     
 check_terminator_and_length:
     mov al, [esi]
