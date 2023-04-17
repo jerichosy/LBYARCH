@@ -50,6 +50,22 @@ check_terminator_and_length:
     cmp byte [length], 30
     je beyond_max_length
     
+    cmp al, 65
+    je check_terminator_and_length_continue
+    cmp al, 84
+    je check_terminator_and_length_continue
+    cmp al, 67
+    je check_terminator_and_length_continue
+    cmp al, 71
+    je check_terminator_and_length_continue
+    
+    ; we shouldn't reach here unless invalid dna
+    push error_dna
+    call printf
+    add esp, 4
+    jmp please_try_again
+    
+check_terminator_and_length_continue:
     inc byte [length]
     inc esi
     
@@ -129,13 +145,7 @@ complement_string:
     cmp al, 71
     je if_g
     
-    ; if we reach here, that means our string is not a valid DNA string
-invalid_dna:
-    push error_dna
-    call printf
-    add esp, 4
-    
-    jmp exit
+    ; One of the above 4 should execute
     
 if_a:
     mov byte [esi], 84
