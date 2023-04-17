@@ -5,8 +5,9 @@ extern gets, printf
 
 section .data
     prompt_dna db "DNA string: ",0
-    error_dna db "Error: Invalid DNA string",0
-    error_terminator db "Error: No terminator",0
+    error_dna db "Error: Invalid DNA string",13,10,0
+    error_terminator db "Error: No terminator",13,10,0
+    error_length db "Error: Beyond maximum length",13,10,0
     message_dna_reverse_complement db "Reverse complement: %s",13,10,0
     message_dna_reverse_palindrome db "Reverse palindrome: %s",13,10,0
     message_yes db "Yes ",0
@@ -41,10 +42,20 @@ check_terminator:
     je terminator_present
     cmp al, 0
     je no_terminator
+    cmp byte [length], 30
+    je beyond_max_length
     
+    inc byte [length]
     inc esi
     
     jmp check_terminator
+    
+beyond_max_length:
+    push error_length
+    call printf
+    add esp, 4
+
+    jmp exit
     
 no_terminator:    
     push error_terminator
@@ -69,7 +80,6 @@ reverse_string:
     ; push
     push eax
     
-    inc byte [length]
     inc esi
     
     jmp reverse_string
